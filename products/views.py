@@ -4,9 +4,11 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import AddReviewForm
+from .forms import AddReviewForm, ProfileUpdateForm
 from .models import Books, Review
 from django.urls import reverse_lazy
+
+
 # Create your views here.
 
 
@@ -14,6 +16,7 @@ class BookListView(View):
     def get(self, request):
         book = Books.objects.all().order_by('-id')
         return render(request, 'book/book_list.html', {'book': book})
+
 
 # class BookListView(ListView):
 #     model = Books
@@ -30,7 +33,6 @@ class BookDetailView(View):
             'reviews': reviews
         }
         return render(request, 'book/book_detail.html', context=context)
-
 
 
 class BookCreateView(CreateView):
@@ -73,9 +75,13 @@ class BookDeleteView(DeleteView):
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+
 class AddReviewView(LoginRequiredMixin, View):
     def get(self, request, pk):
         books = Books.objects.get(pk=pk)
+        if Review.objects.filter(book=pk, user=request.user).exists():
+            messages.error(request, "Siz allaqchon komment qo'shgansiz!")
+            return redirect('products:book-detail', pk=pk)
         add_review_form = AddReviewForm()
         context = {
             'books': books,
@@ -85,6 +91,9 @@ class AddReviewView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
         books = Books.objects.get(pk=pk)
+        if Review.objects.filter(book=pk, user=request.user).exists():
+            messages.error(request, "Siz allaqchon komment qo'shgansiz!")
+            return redirect('products:book-detail', pk=pk)
         add_review_form = AddReviewForm(request.POST)
         if add_review_form.is_valid():
             review = Review.objects.create(
@@ -95,12 +104,12 @@ class AddReviewView(LoginRequiredMixin, View):
             )
             review.save()
             messages.success(request, 'Review added successfully')
-        
-            return HttpResponseRedirect(reverse('products:book-detail', kwargs={'pk': pk}))  # Redirect after successful review
+
+            return HttpResponseRedirect(
+                reverse('products:book-detail', kwargs={'pk': pk}))  # Redirect after successful review
         else:
             # Handle form validation errors
             return render(request, 'book/add_review.html', {'books': books, 'add_review_form': add_review_form})
-
 
 
 class ReviewDeleteView(LoginRequiredMixin, DeleteView):
@@ -109,3 +118,14 @@ class ReviewDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('products:book-detail', kwargs={'pk': self.object.book.pk})
+
+
+class UpdateReviewView(LoginRequiredMixin, UpdateView):
+    model = Review
+    fields = ['comment', 'star_given']
+    template_name = 'book/update_review.html'
+
+    def get_success_url(self):
+        return reverse_lazy('products:book-detail', kwargs={'pk': self.object.book.pk})
+
+

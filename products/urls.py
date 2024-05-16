@@ -8,7 +8,9 @@ urlpatterns = [
     path('delete/<int:pk>', BookDeleteView.as_view(), name='book-delete'),
     path('create', BookCreateView.as_view(), name='create-book'),
     path('add_review/<int:pk>', AddReviewView.as_view(), name='add-review'),
-   path('review/<int:pk>/delete/', ReviewDeleteView.as_view(), name='review-delete'),
+    path('review/<int:pk>/delete/', ReviewDeleteView.as_view(), name='review-delete'),
+    path('review/<int:pk>/update/', UpdateReviewView.as_view(), name='review-update'),
+
 ]
 
 

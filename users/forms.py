@@ -16,6 +16,14 @@ class CustomUserForm(forms.ModelForm):
         return user
 
 
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email', 'first_name', 'last_name', 'image')
+
+
+
+
 
 
 

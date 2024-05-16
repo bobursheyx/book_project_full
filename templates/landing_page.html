@@ -1,5 +1,8 @@
-<style>
+{% extends "base.html" %}
+{% block title %} Home Page {% endblock %}
 
+{% block content %}
+    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -7,16 +10,20 @@
             background-color: #f0f0f0;
         }
 
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         h1 {
             color: #333;
             text-align: center;
             margin-top: 50px;
         }
-</style>
-{% extends "base.html" %}
+    </style>
 
-    <title>{% block title %} Home Page {% endblock %}</title>
-
-{% block content %}
-    <h1>Home page</h1>
+    <div class="container">
+        <h1>Home page</h1>
+    </div>
 {% endblock content %}

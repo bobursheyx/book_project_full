@@ -1,18 +1,67 @@
 {% extends "base.html" %}
 
-    <title>{% block title %} Books {% endblock %}</title>
+{% block title %} Books {% endblock %}
 
 {% block content %}
-<body>
-<h1>Books Page</h1>
-<a href="{% url 'products:create-book'%}">Add Book</a> <br><br><hr>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
 
-{% for b in book %}
-    <a href="{% url 'products:book-detail' b.pk %}">{{ b.title }}</a> <br><br>
-{% endfor %}
-</body>
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .add-book-button {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease; /* Hover qilganda o'zgarish */
+        }
+
+        a:hover {
+            background-color: #f0f0f0; /* Hover qilganda o'zgarish */
+        }
+    </style>
+
+    <body>
+        <div class="container">
+            <h1>Books Page</h1>
+
+            {% for b in book %}
+                <a href="{% url 'products:book-detail' b.pk %}">{{ b.title }}</a> <br><br>
+               <img src="{{ b.image.url }}" height="200px">
+
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="add-book-button">
+                <a href="{% url 'products:create-book'%}">Add Book</a>
+            </div>
+
+
+    </body>
 {% endblock content %}
-
-
-
-

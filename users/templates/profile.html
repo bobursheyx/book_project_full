@@ -1,0 +1,65 @@
+<style>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+
+    h1 {
+        color: #333;
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    img {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    a {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #007BFF;
+        text-decoration: none;
+    }
+
+    a:hover {
+        color: #0056b3;
+    }
+</style>
+
+
+{% extends "base.html" %}
+
+    <title>{% block title %}Profile {% endblock %}</title>
+
+{% block content %}
+
+
+
+<body>
+<br>
+<img src="{{ user.image.url }}" >
+<h3>Username: {{ user.username }}</h3>
+<h3>First Name: {{ user.first_name }}</h3>
+<h3>Last Name: {{ user.last_name }}</h3>
+<h3>Email: {{ user.email }}</h3>
+
+<a href="{% url 'users:update_profile' %}">Update</a>
+
+
+
+</body>
+
+{% endblock content %}

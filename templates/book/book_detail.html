@@ -1,24 +1,79 @@
 {% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %} {{book.title}} {% endblock %}</title>
-</head>
+{% block title %} {{book.title}} {% endblock %}
+
 {% block content %}
-<body>
-<h1>Name: {{ book.title }}</h1>
-<img src="{{ book.image.url }}" height="200px"> <br><br>
-<h4>Description: {{ book.description }}</h4>
-<h4>Price: {{ book.price }}</h4>
-<h4>Pages: {{ book.page }}</h4>
-</body>
-<a href="{% url 'products:book-delete' book.pk %}" >Delete</a>
-<h2>Reviews</h2>
-<a href="{% url 'products:add-review' book.pk %}" >Add Review</a>
-{% for review in reviews %}
-    <h4>{{ review.user.username }} | {{ review.star_given }}</h4>
-    <p>{{ review.comment }}</p>
-    <a href="{% url 'products:review-delete' review.pk %}" >Delete</a> <!-- Bu qator -->
-    <hr>
-{% endfor %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+        }
+
+        h4 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            display: block;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        hr {
+            margin-top: 20px;
+            border: none;
+            border-top: 1px solid #ccc;
+        }
+    </style>
+
+    <div class="container">
+        <h1>Name: {{ book.title }}</h1>
+        <img src="{{ book.image.url }}" height="200px"> <br><br>
+        <h4>Description: {{ book.description }}</h4>
+        <h4>Price: {{ book.price }}</h4>
+        <h4>Pages: {{ book.page }}</h4>
+        <a href="{% url 'products:book-delete' book.pk %}" >Delete</a>
+        <h2>Reviews</h2>
+        <a href="{% url 'products:add-review' book.pk %}" >Add Review</a>
+        {% for review in reviews %}
+            <h4>{{ review.user.username }} | {{ review.star_given }}</h4>
+            <p>{{ review.comment }}</p>
+
+            {% if request.user == review.user %}
+                <a href="{% url 'products:review-delete' review.pk %}" >Delete</a>
+                <a href="{% url 'products:review-update' review.pk %}" >Update</a>
+            {% endif %}
+            <hr>
+        {% endfor %}
+    </div>
 {% endblock content %}
